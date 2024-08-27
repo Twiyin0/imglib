@@ -1,4 +1,5 @@
 // 使用示例
+// 使用jsdelivr: https://cdn.jsdelivr.net/gh/Twiyin0/imglib/pixiv/result_acc.json
 const accImg = require("./result_acc.json")
 const verImg = require("./result_acc.json")
 const otherImg = require("./result_acc.json")
