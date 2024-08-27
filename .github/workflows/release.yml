@@ -1,32 +1,33 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will install Deno then run `deno lint` and `deno test`.
-# For more information see: https://github.com/denoland/setup-deno
-
-name: Deno
+name: Create Release
 
 on:
   push:
-    branches: ["master"]
     tags:
-      - 'v0.*'
-      - 'draft-*'
-  pull_request:
-    branches: ["master"]
+      - 'v*.*.*'
 
 jobs:
-  test:
+  create_release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup repo
-        uses: actions/checkout@v4
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          draft: true
-          fail_on_unmatched_files: true
+          node-version: '16'
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }} # 使用触发此工作流的标签作为发布的标签
+          release_name: Release ${{ github.ref }}
+          body: |
+            Release notes for version ${{ github.ref }}.
+          draft: false
+          prerelease: false
+
